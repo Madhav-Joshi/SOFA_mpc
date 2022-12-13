@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<!--Root node-->
+<Node name="root" dt="0.01" gravity="0 0 0">
+
+    <!--Animation Loop-->
+    <DefaultAnimationLoop />
+    
+    <!--Load Mesh-->
+    <MeshGmshLoader name="meshLoaderCoarse" filename="mesh/liver1.msh" />
+    
+    <!--Start a Node-->
+    <Node name="Liver">
+
+        <!--Solver to solve physics-->
+        <EulerImplicitSolver /> <!--Implicit is more stable than Explicit, converts F=Ma to solving for velocity-->
+        <CGLinearSolver iterations="200" tolerance="1e-09" threshold="1e-09"/><!--Solves for Ax=b, where x is velocity-->
+
+        <!--A Topology Container taking src from the parent node-->
+        <TetrahedronSetTopologyContainer name="topo" src="@../meshLoaderCoarse" />
+        <!--To compute volume, surface area etc.-->
+        <TetrahedronSetGeometryAlgorithms template="Vec3d" name="GeomAlgo" />
+
+        <!--A container of DoF with template as Rigid3d (if interested in pos+orient) or Vec3d (only pos)-->
+        <MechanicalObject template="Vec3d" name="MechanicalModel" showObject="1"/>
+        <!--Elastic constitutive model of our object-->
+        <TetrahedronFEMForceField name="FEM" youngModulus="1000" poissonRatio="0.4" />
+        <!--Sparse mass matrix, other option is UniformMass for diagonal mass matrix-->
+        <MeshMatrixMass massDensity="1" />
+        <!--This force is distributed equally in all nodes-->
+        <ConstantForceField totalForce="1 0 0" />
+
+        <!--A subnode for visual model, different surface mesh can be used-->
+        <Node name="Visual" >
+            <!--Visual model loader based on OpenGL, equivalent to MechanicalObject in Physical Model-->
+            <!--It recovers points, edges and triangles even inside volume-->
+            <OglModel name="VisualModel" src="@../../meshLoaderCoarse" />
+            <!--IdentityMapping as it is the same mesh, otherwise BarycentricMapping-->
+            <IdentityMapping name="Mapping" input="@../MechanicalModel" output="@VisualModel" />
+        </Node>
+
+    </Node>
+</Node>
