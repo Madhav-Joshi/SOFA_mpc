@@ -23,7 +23,7 @@ def createScene(root):
     # A subnode visu_liver of Liver
     visu_liver = liver.addChild("Visual_liver")
     visu_liver.addObject("OglModel",name="VisualModel_liver",src="@../../meshLoaderCoarse")
-    visu_liver.addObject("IdentityMapping",name="Mapping_liver",input="@../MechanicalModel",output="@VisualModel")
+    visu_liver.addObject("IdentityMapping",name="Mapping_liver",input="@../MechanicalModel",output="@VisualModel_liver")
 
     # Heart
     # visu subnode
