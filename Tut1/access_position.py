@@ -15,7 +15,7 @@ class printPosition(Sofa.Core.Controller):
         # As usual with python one possible way to discover an API is to use python introspection capbalities
         # Eg: list the object's method with dir()
         # print(str(dir(self.tetrameshMO)))
-        print(str(dir(self.root)))
+        # print(str(dir(self.root)))
         # See nodes 500, 503 and 507 positions
 
     def onAnimateBeginEvent(self, event):
@@ -31,6 +31,26 @@ class printPosition(Sofa.Core.Controller):
         print(str(myMOpositions[500]))#[0])+' '+str(myMOpositions[500][1])+' '+str(myMOpositions[500][2]))
 
 def createScene(root):
+    root.addObject('RequiredPlugin', pluginName=[
+                            "Sofa.Component.Collision.Detection.Algorithm",#/> <!-- Needed to use components [BVHNarrowPhase, BruteForceBroadPhase, DefaultPipeline] --                                                                               ->
+                            "Sofa.Component.Collision.Detection.Intersection",#/> <!-- Needed to use components [MinProximityIntersection] -->
+                            "Sofa.Component.Collision.Geometry",#/> <!-- Needed to use components [TriangleCollisionModel] -->
+                            "Sofa.Component.Collision.Response.Contact",#/> <!-- Needed to use components [DefaultContactManager] -->
+                            "Sofa.Component.Constraint.Projective",#/> <!-- Needed to use components [FixedConstraint, FixedPlaneConstraint] -->
+                            "Sofa.Component.IO.Mesh",#/> <!-- Needed to use components [MeshGmshLoader] -->
+                            "Sofa.Component.LinearSolver.Iterative",#/> <!-- Needed to use components [CGLinearSolver] -->
+                            "Sofa.Component.Mapping.Linear",#/> <!-- Needed to use components [IdentityMapping] -->
+                            "Sofa.Component.Mass",#/> <!-- Needed to use components [DiagonalMass] -->
+                            "Sofa.Component.ODESolver.Backward",#/> <!-- Needed to use components [EulerImplicitSolver] -->
+                            "Sofa.Component.SolidMechanics.FEM.Elastic",#/> <!-- Needed to use components [TetrahedralCorotationalFEMForceField] -->
+                            "Sofa.Component.SolidMechanics.Spring",#/> <!-- Needed to use components [TriangularBendingSprings] -->
+                            "Sofa.Component.StateContainer",#/> <!-- Needed to use components [MechanicalObject] -->
+                            "Sofa.Component.Topology.Container.Dynamic",#/> <!-- Needed to use components [TetrahedronSetGeometryAlgorithms, TetrahedronSetTopologyCont                                                                               tainer, TetrahedronSetTopologyModifier, TriangleSetGeometryAlgorithms, TriangleSetTopologyContainer, TriangleSetTopologyModifier] -->
+                            "Sofa.Component.Topology.Mapping",#/> <!-- Needed to use components [Tetra2TriangleTopologicalMapping] -->
+                            "Sofa.Component.Visual",#/> <!-- Needed to use components [VisualStyle] -->
+                            "Sofa.GL.Component.Rendering3D",#/> <!-- Needed to use components [OglModel] -->
+                        ])
+
     root.gravity=[0,-9.81,0]
     root.dt=0.05
 
@@ -57,7 +77,7 @@ def createScene(root):
     
     # In some simulations, the topology may evolve, see doc/simulation principals/topology
     tetraMesh.addObject('TetrahedronSetTopologyModifier', name="Modifier")
-    # tetraMesh.addObject('TetrahedronSetGeometryAlgorithms', template="Vec3d", name="GeomAlgo", drawTetrahedra="0", drawColorTetrahedra="1.0 1.0 0.3 1.0")
+    tetraMesh.addObject('TetrahedronSetGeometryAlgorithms', template="Vec3d", name="GeomAlgo", drawTetrahedra="0", drawColorTetrahedra="1.0 1.0 0.3 1.0")
     
     # Several FEM simulation algorithms, can choose depending on speed and accuracy
     tetraMesh.addObject('TetrahedralCorotationalFEMForceField', template="Vec3d", name="FEM", method="large", poissonRatio="0.3", youngModulus="360", assembling="0")
@@ -85,23 +105,6 @@ def createScene(root):
 def main():
     import Sofa.Gui
     # Make sure to load all SOFA libraries
-    SofaRuntime.importPlugin("Sofa.Component.Collision.Detection.Algorithm")#/> <!-- Needed to use components [BVHNarrowPhase, BruteForceBroadPhase, DefaultPipeline] --                                                                               ->
-    SofaRuntime.importPlugin("Sofa.Component.Collision.Detection.Intersection")#/> <!-- Needed to use components [MinProximityIntersection] -->
-    SofaRuntime.importPlugin("Sofa.Component.Collision.Geometry")#/> <!-- Needed to use components [TriangleCollisionModel] -->
-    SofaRuntime.importPlugin("Sofa.Component.Collision.Response.Contact")#/> <!-- Needed to use components [DefaultContactManager] -->
-    SofaRuntime.importPlugin("Sofa.Component.Constraint.Projective")#/> <!-- Needed to use components [FixedConstraint, FixedPlaneConstraint] -->
-    SofaRuntime.importPlugin("Sofa.Component.IO.Mesh")#/> <!-- Needed to use components [MeshGmshLoader] -->
-    SofaRuntime.importPlugin("Sofa.Component.LinearSolver.Iterative")#/> <!-- Needed to use components [CGLinearSolver] -->
-    SofaRuntime.importPlugin("Sofa.Component.Mapping.Linear")#/> <!-- Needed to use components [IdentityMapping] -->
-    SofaRuntime.importPlugin("Sofa.Component.Mass")#/> <!-- Needed to use components [DiagonalMass] -->
-    SofaRuntime.importPlugin("Sofa.Component.ODESolver.Backward")#/> <!-- Needed to use components [EulerImplicitSolver] -->
-    SofaRuntime.importPlugin("Sofa.Component.SolidMechanics.FEM.Elastic")#/> <!-- Needed to use components [TetrahedralCorotationalFEMForceField] -->
-    SofaRuntime.importPlugin("Sofa.Component.SolidMechanics.Spring")#/> <!-- Needed to use components [TriangularBendingSprings] -->
-    SofaRuntime.importPlugin("Sofa.Component.StateContainer")#/> <!-- Needed to use components [MechanicalObject] -->
-    SofaRuntime.importPlugin("Sofa.Component.Topology.Container.Dynamic")#/> <!-- Needed to use components [TetrahedronSetGeometryAlgorithms, TetrahedronSetTopologyCont                                                                               tainer, TetrahedronSetTopologyModifier, TriangleSetGeometryAlgorithms, TriangleSetTopologyContainer, TriangleSetTopologyModifier] -->
-    SofaRuntime.importPlugin("Sofa.Component.Topology.Mapping")#/> <!-- Needed to use components [Tetra2TriangleTopologicalMapping] -->
-    SofaRuntime.importPlugin("Sofa.Component.Visual")#/> <!-- Needed to use components [VisualStyle] -->
-    SofaRuntime.importPlugin("Sofa.GL.Component.Rendering3D")#/> <!-- Needed to use components [OglModel] -->
 
     #Create the root node
     root = Sofa.Core.Node("root")
