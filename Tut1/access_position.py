@@ -115,11 +115,7 @@ def main():
     # Once defined, initialization of the scene graph
     Sofa.Simulation.init(root)
 
-    # Run the simulation for 10 steps
-    # for iteration in range(10):
-    #     print(f'Iteration #{iteration}')
-    #     Sofa.Simulation.animate(root, root.dt.value)
-
+    # Run the simulation for 10 time steps
     if not USE_GUI:
         for iteration in range(10):
             print(f'Iteration #{iteration}')
@@ -130,7 +126,7 @@ def main():
         # Launch the GUI (qt or qglviewer)
         Sofa.Gui.GUIManager.Init("myscene", "qglviewer")
         Sofa.Gui.GUIManager.createGUI(root, __file__)
-        Sofa.Gui.GUIManager.SetDimension(1080, 1080)
+        # Sofa.Gui.GUIManager.SetDimension(1080, 1080)
         # Initialization of the scene will be done here
         Sofa.Gui.GUIManager.MainLoop(root)
         Sofa.Gui.GUIManager.closeGUI()
