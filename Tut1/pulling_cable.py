@@ -46,9 +46,8 @@ def createScene(root):
     cyl.addObject("MechanicalObject",template="Vec3d",name="MechanicalModel",showObject="1",translation="0 -10 0")
     cyl.addObject("TetrahedronFEMForceField",name="FEM",youngModulus="100000",poissonRatio="0.4")
 
-    cyl.addObject("MeshMatrixMass",massDensity="1")
-    # cyl.addObject("UniformMass",totalMass="0.1")
-    # cyl.addObject("ConstantForceField",totalForce="1 0 0")
+    # cyl.addObject("MeshMatrixMass",massDensity="1")
+    cyl.addObject("UniformMass",totalMass="0.1")
 
     # To facilitate the selection of DoFs, SOFA has a concept called ROI (Region of Interest).
     #  The idea is that ROI component "select" all DoFS that are enclosed by their "region".
@@ -67,7 +66,7 @@ def createScene(root):
     cyl.addObject('GenericConstraintCorrection')
     
     ##########################################
-    # Cable                                  #
+    #######       Cable       ################
     ##########################################
     
     #  This creates a new node in the scene. This node is appended to the finger's node.
@@ -78,17 +77,14 @@ def createScene(root):
     #  the points where the cable is passing by.
     cable.addObject('MechanicalObject',
                     position=[
-                        [1, -2, 0],
                         [1, -4, 0],
-                        [1, -6, 0],
-                        [1, -8, 0],
                         [1, -10, 0]])
 
     # Create a CableConstraint object with a name.
     # the indices are referring to the MechanicalObject's positions.
     # The last index is where the pullPoint is connected.
     cable.addObject('CableConstraint', name="aCableActuator",
-                    indices=list(range(0, 5)),
+                    indices=list(range(0, 2)),
                     # indices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
                     minForce=0,  # Set that the cable can't push
                     pullPoint=[1.0, 1.0, 0])
@@ -112,7 +108,7 @@ def createScene(root):
     visu_cyl.addObject("OglModel",name="VisualModel_cyl",src="@../../meshLoaderCoarse",color="green")
     visu_cyl.addObject("IdentityMapping",name="Mapping_cyl",input="@../MechanicalModel",output="@VisualModel_cyl")
     
-    visu_cyl.addObject('BarycentricMapping',name="visual_baryCentricMap")
+    # visu_cyl.addObject('BarycentricMapping',name="visual_baryCentricMap")
     return root
 
 def main():
