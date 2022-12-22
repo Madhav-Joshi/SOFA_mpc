@@ -4,7 +4,8 @@ from wakrabot_cables_controller import CableController
 # Choose in your script to activate or not the GUI
 USE_GUI = True
 vol_mesh_path = "D:\Sofa\Tut1\mesh\Wakrabot_final_SI.msh"
-Control_variable = 'force'
+# Control varible to be used for cable
+Control_variable = 'force' # 'displacement' also works
 
 def createScene(root):
     root.addObject("RequiredPlugin", name='SoftRobots')
@@ -119,7 +120,7 @@ def createScene(root):
 
     cable2.addObject('BarycentricMapping',name="mech_baryCentricMap")
     
-    wakra.addObject(CableController(name="CableController", wakrabot=wakra))
+    wakra.addObject(CableController(name="CableController", wakrabot=wakra, rootnode = root))
     
     ############################################
     ######  Visualisation Node #################
