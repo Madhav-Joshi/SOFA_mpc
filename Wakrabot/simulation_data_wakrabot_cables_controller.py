@@ -59,14 +59,15 @@ class CableController(Sofa.Core.Controller):
         #do whatever you want at the beginning of the step
         t = self.root.time.value
         # print(f'Begin Animate Event Called at {np.round(t,2)}')
-        inputValue = self.inputValue
+        # inputValue = self.inputValue
 
         self.index = int(t/self.root.dt.value)
         if self.index>=(self.traverse.shape[0]-1): self.index=self.traverse.shape[0]-1
         
         for i in range(3):
-            inputValue[i].value = [self.traverse[self.index,i]]
-        
+            self.inputValue[i].value = [self.traverse[self.index,i]]
+             
+        pass
 
     # called on each animation step
     def onAnimateEndEvent(self, event): 

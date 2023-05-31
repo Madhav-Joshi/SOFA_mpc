@@ -8,6 +8,7 @@ vol_mesh_path = "D:\Sofa\Wakrabot\mesh\Wakrabot_final_SI.msh"
 Control_variable = 'force' # 'displacement' also works
 
 def createScene(root):
+    initialValue = 0.1 # Compressed value of forces
     root.addObject('RequiredPlugin', pluginName=[
                             "Sofa.Component.LinearSolver.Iterative",  # Needed to use components [CGLinearSolver]
                             "Sofa.Component.Mapping.Linear",  # Needed to use components [IdentityMapping]
@@ -27,7 +28,6 @@ def createScene(root):
                             "Sofa.Component.AnimationLoop", # Needed to use components [FreeMotionAnimationLoop]
                             "Sofa.Component.Visual", # Needed to use components [VisualStyle]
                             "Sofa.Component.Constraint.Lagrangian.Solver", # Needed to use components [GenericConstraintSolver]
-                            
                         ])  
     
     root.addObject("RequiredPlugin", name='SoftRobots')
@@ -46,7 +46,6 @@ def createScene(root):
     # New Node
     wakra = root.addChild("Wakrabot") # Name of child wakra
     wakra.addObject("EulerImplicitSolver", name='odesolver', rayleighMass=0.1, rayleighStiffness=0.1) # Solver
-    # wakra.addObject("CGLinearSolver",iterations="200",tolerance="1e-09",threshold="1e-9")
     wakra.addObject('SparseLDLSolver', template='CompressedRowSparseMatrixMat3x3d')
 
     wakra.addObject("TetrahedronSetTopologyContainer",name="topo",src="@../meshLoaderCoarse")
@@ -82,7 +81,7 @@ def createScene(root):
                     indices=list(range(0, number_of_cable_through_points)),
                     minForce=0,  # Set that the cable0 can't push
                     pullPoint=[0, 0.022  , 0.04599],
-                    value=0,#initialValue
+                    value=initialValue,#initialValue
                     valueType=valuetype, # 'displacement' or 'force'
                     hasPullPoint=True)
 
@@ -100,7 +99,7 @@ def createScene(root):
                     indices=list(range(0, number_of_cable_through_points)),
                     minForce=0,  # Set that the cable0 can't push
                     pullPoint=[0.03982, 0.022  , -0.02299],
-                    value=0, #initialValue
+                    value=initialValue, #initialValue
                     valueType=valuetype, # or 'force'
                     hasPullPoint=True)
 
@@ -118,7 +117,7 @@ def createScene(root):
                     indices=list(range(0, number_of_cable_through_points)),
                     minForce=0,  # Set that the cable0 can't push
                     pullPoint=[-0.03982, 0.022  , -0.02299],
-                    value=0,#initialValue
+                    value=initialValue,#initialValue
                     valueType=valuetype, # or 'force'
                     hasPullPoint=True)
 

@@ -1,14 +1,16 @@
 import Sofa
+from Sofa import Gui
 from simulation_data_wakrabot_cables_controller import CableController
 import numpy as np
 
 # Choose in your script to activate or not the GUI
-USE_GUI = False
+USE_GUI = True
 vol_mesh_path = "D:\Sofa\Wakrabot\mesh\Wakrabot_final_SI.msh"
 # Control varible to be used for cable
 Control_variable = 'force' # 'displacement' also works
 
 def createScene(root):
+    initialValue = 0.1 # Compressed value of forces
     root.addObject('RequiredPlugin', pluginName=[
                             "Sofa.Component.LinearSolver.Iterative",  # Needed to use components [CGLinearSolver]
                             "Sofa.Component.Mapping.Linear",  # Needed to use components [IdentityMapping]
@@ -53,7 +55,7 @@ def createScene(root):
     wakra.addObject("TetrahedronSetGeometryAlgorithms",template="Vec3d",name="GeomAlgo")
 
     wakra.addObject("MechanicalObject",template="Vec3d",name="MechanicalModel",showObject="1",translation="0 0 0")
-    wakra.addObject("TetrahedronFEMForceField",name="FEM",youngModulus="1000000000",poissonRatio="0.1")
+    wakra.addObject("TetrahedronFEMForceField",name="FEM",youngModulus="1000000000",poissonRatio="0.1",method="polar",computeVonMisesStress='1',showVonMisesStressPerNode='true',listening='1',updateStiffness='true')
 
     # wakra.addObject("MeshMatrixMass",massDensity="1000")
     wakra.addObject("UniformMass",totalMass="1") # Approximation
@@ -65,7 +67,6 @@ def createScene(root):
     
     wakra.addObject('GenericConstraintCorrection')
 
-    initialValue = 0.1
     ##########################################
     #######       Cable       ################
     ##########################################
@@ -139,7 +140,7 @@ def createScene(root):
     return root
 
 def main():
-    import Sofa.Gui
+    # import Sofa.Gui
     root = Sofa.Core.Node("root") # Create the root node
     # Call the below 'createScene' function to create the scene graph
     createScene(root)
@@ -153,14 +154,14 @@ def main():
             Sofa.Simulation.animate(root, root.dt.value)
     else:
         # Find out the supported GUIs
-        print ("Supported GUIs are: " + Sofa.Gui.GUIManager.ListSupportedGUI(","))
+        print ("Supported GUIs are: " + Gui.GUIManager.ListSupportedGUI(","))
         # Launch the GUI (qt or qglviewer)
-        Sofa.Gui.GUIManager.Init("myscene", "qglviewer")
-        Sofa.Gui.GUIManager.createGUI(root, __file__)
-        # Sofa.Gui.GUIManager.SetDimension(1080, 1080)
+        Gui.GUIManager.Init("myscene", "qglviewer")
+        Gui.GUIManager.createGUI(root, __file__)
+        # Gui.GUIManager.SetDimension(1080, 1080)
         # Initialization of the scene will be done here
-        Sofa.Gui.GUIManager.MainLoop(root)
-        Sofa.Gui.GUIManager.closeGUI()
+        Gui.GUIManager.MainLoop(root)
+        Gui.GUIManager.closeGUI()
         print("GUI was closed")
     print("Simulation is done.")
 
